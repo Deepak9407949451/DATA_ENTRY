@@ -786,7 +786,7 @@ function getFilteredPatients() {
             p.diagnosis,
             p.billInvoiceNo,
             p.relation,
-            p.paymentDate
+            p.courierDetails
         ];
 
         const termMatch = searchFields.some(value => String(value || "").toLowerCase().includes(s));
