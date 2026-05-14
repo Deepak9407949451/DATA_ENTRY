@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hospital Patient Management By Deepak Shriwas Pro</title>
+<title>Deepak Shriwas Data </title>
 <!-- Robust SheetJS Library for Excel/Google Sheets Export -->
 <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 
@@ -11,7 +11,7 @@
 body { font-family: Arial, sans-serif; background:#ffffff; margin:20px; }
 .dashboard { display:flex; gap:15px; margin-bottom:20px; flex-wrap:wrap; }
 .card { background:lightgray; padding:15px; border-radius:8px; flex:1; text-align:center; box-shadow:0 2px 5px hsla(88, 100%, 59%, 0.1); border-top: 4px solid #007bff; }
-.card b { font-size:17px; color:#1900ff; }
+.card b { font-size:20px; color:#1900ff; }
 .card-blue { border-top-color: #1900ff; }
 .card-blue b { color: #1900ff; }
 .card-yellow { border-top-color: #ffee00; }
@@ -35,20 +35,20 @@ body { font-family: Arial, sans-serif; background:#ffffff; margin:20px; }
 .form-box { background:#c4c4c4; padding:20px; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; border-left: 4px solid #28a745; }
 .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; }
 label { font-size: 13px; font-weight: bold; color: #000; }
-input, select, button { padding:10px; border:1px solid #ccc; border-radius:5px; width: 100%; box-sizing: border-box; }
+input, select, button { padding: 10px; border:1px solid #ccc; border-radius:8px; width: 100%; box-sizing: border-box; font-size: 16px; font-weight: bold; } 
 button {
     background: #007bff;
-    color: white;
-    border: none;
+    color: white;                               <!-- Base style for all buttons -->
+    border: 3px solid #007bff;
     cursor: pointer;
     font-weight: bold;
-    font-size: 10px;
-    padding: 4px 14px;
-    border-radius: 7px;
-    margin-right: 6px;
-    margin-bottom: 2px;
+    font-size: 15px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-right: 8px;
+    margin-bottom: 5px;
     transition: background 0.2s, box-shadow 0.2s;
-    min-width: 80px;
+    min-width:100px;
     min-height: 28px;
     box-shadow: 0 1px 2px rgba(0,0,0,0.07);
 }
@@ -58,7 +58,7 @@ button:last-child {
 .auto-sync-btn {
     min-width: 110px;
     padding: 6px 12px !important;
-    font-size: 9px !important;
+    font-size: 12px !important;
 }
 button:active {
     box-shadow: 0 0 0 2px #007bff33;
@@ -121,19 +121,20 @@ tr:hover { background-color: #f9f9f9; }
 <h2> Patient Management by Deepak</h2>
 </ --  DESHBOARD CLICK FETURE -- >
 <div class="dashboard">
-    <div class="card card-blue">Total Patients<br><b id="totalPatientsCount">0</b></div>
+    <div class="card card-blue" onclick="filterByStatus('Total Patients')" style="cursor:pointer;">Total Patients<br><b id="totalPatientsCount">0</b></div>
     <div class="card card-blue" onclick="filterByStatus('Admitted')" style="cursor:pointer;">Admitted<br><b id="totalAdmittedCount">0</b></div>
     <div class="card card-green" onclick="filterByStatus('Initial Approved')" style="cursor:pointer;">Initial Approved<br><b id="totalInitialApprovedCount">0</b></div>
     <div class="card card-green" onclick="filterByStatus('Discharge')" style="cursor:pointer;">Discharge<br><b id="totalDischargeCount">0</b></div>
     <div class="card card-green" onclick="filterByStatus('Discharge Approved')" style="cursor:pointer;">Discharge Approved<br><b id="totalDischargeApprovedCount">0</b></div>
     <div class="card card-red" onclick="filterByStatus('Denial')" style="cursor:pointer;">Denial<br><b id="totalDenialCount">0</b></div>
+    <div class="card card-blue" onclick="filterByStatus('Pending')" style="cursor:pointer;">Pending<br><b id="totalPendingCount">0</b></div>
+    <div class="card card-green" onclick="filterByStatus('Settled')" style="cursor:pointer;">Settled<br><b id="totalSettlementAmountSum">0</b></div>
     <div class="card card-blue">Total Bill<br>₹<b id="totalBillSum">0</b></div>
     <div class="card card-brown">Approved<br>₹<b id="totalApprovedSum">0</b></div>
     <div class="card card-maroon">Discount<br>₹<b id="totalDiscountSum">0</b></div>
     <div class="card card-green">Deduction<br>₹<b id="totalDeductionSum">0</b></div>
     <div class="card card-darkgreen">Patient Pay<br>₹<b id="totalPatientPaySum">0</b></div>
-    <div class="card card-darkgreen">Settlement Amount<br>₹<b id="totalSettlementAmountSum">0</b></div>
-    
+   
 </div>
 <!-- FOLDER LOCATION SETTINGS - COLLAPSIBLE -->
 <div style="margin-bottom:20px;">
@@ -243,6 +244,8 @@ tr:hover { background-color: #f9f9f9; }
         <div style="display: none;"><label>Bank Address</label><input id="bankAddress" placeholder="Bank Address" readonly style="background:#f0f0f0; cursor:not-allowed;"></div>
         <div><label>Courier Details</label><input id="courierDetails" placeholder="Courier Details"></div>
         <div><label>Courier Date</label><input type="date" id="courierDate"></div>
+        <div style="grid-column: span 2;"><label>Surgery Name</label><input id="surgeryName" placeholder="Surgery Name" onkeyup="render()" style="width:100%; padding: 10px; box-sizing: border-box;"></div>
+        <div style="grid-column: span 2;"><label>Remark</label><input id="remark" placeholder="Remark" onkeyup="render()" style="width:100%; padding: 10px; box-sizing: border-box;"></div>
         <div><label>Status</label>
             <select id="status">
                 <option value="Admitted">Admitted</option>
@@ -261,11 +264,11 @@ tr:hover { background-color: #f9f9f9; }
             </select>
         </div>
         <div style="display:flex; align-items:flex-end;">
-            <button id="addBtn" onclick="addPatientWithFolderCreation()">Add Record</button>
-            <button onclick="clearForm()">Clear Form</button>
+            <button id="addBtn" onclick="addPatientWithFolderCreation()">ADD</button>
+            <button onclick="clearForm()">CLEAR</button>
             <button id="updateBtn" class="btn-update" onclick="updatePatientWithFolderCreation()">Update</button>
-            <button onclick="toggleInvoiceSection()" style="background:#ff6f00; margin-left: auto;">Calculate Invoice</button>
-            <button onclick="openSpreadsheet()" style="background:#ff6f00;">Open Email </button>
+            <button onclick="toggleInvoiceSection()" style="background:#ff6f00; margin-left: auto;">Invoice</button>
+            <button onclick="openSpreadsheet()" style="background:#ff6f00;">Email</button>
         </div>
     </div>
 </div>
@@ -346,7 +349,7 @@ tr:hover { background-color: #f9f9f9; }
     </select>
     <input type="date" id="filterDoaFrom" onchange="render()" title="Filter DOA from" style="width: 170px;">
     <input type="date" id="filterDoaTo" onchange="render()" title="Filter DOA to" style="width: 170px;">
-    <label style="display: flex; align-items: center; gap: 5px; font-size: 7px; white-space: nowrap;">
+    <label style="display: flex; align-items: center; gap: 5px; font-size: 10px; white-space: nowrap;">
         <input type="checkbox" id="showHospitalHeader" checked> Header
     </label>
     <button id="toggleAutoSyncBtn" onclick="toggleAutoSync()" class="auto-sync-btn" style="background:#20c997; color:white;">Auto Sync: OFF</button>
@@ -365,7 +368,7 @@ tr:hover { background-color: #f9f9f9; }
             <tr>
                 <th style="width:30px; min-width:30px; display:flex; align-items:center; justify-content:center; gap:4px; white-space: nowrap; padding:4px;">
                     <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this.checked)">
-                    <label for="selectAllCheckbox" style="font-size:6px; margin:0;"></label>
+                    <label for="selectAllCheckbox" style="font-size:18px; margin:0;"></label>
                 </th>
                 <th style="width:20px; min-width:20px; text-align:center;">Action</th>
                 <th style="width:20px; min-width:20px; text-align:center;">S.No</th>
@@ -374,7 +377,8 @@ tr:hover { background-color: #f9f9f9; }
                 <th>Mobile Number</th>
                 <th>Insurance Limit</th>
                 <th>IPD No</th>
-                <th>DOA / DOD</th>
+                <th>DOA</th>
+                <th>DOD</th>
                 <th>TPA/Ins. Name</th>
                 <th>Insurance Company</th>
                 <th>Insurance ID No</th>
@@ -400,6 +404,8 @@ tr:hover { background-color: #f9f9f9; }
                 <th>Courier Details</th>
                 <th>Courier Date</th>
                 <th>Diagnosis</th>
+                <th>Surgery Name</th>
+                <th>Remark</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -413,7 +419,7 @@ let editIndex = -1;
 let nextPatientId = Number(localStorage.getItem("nextPatientId")) || 1;
 let selectedPatientIds = new Set();
 
-const fieldIds = ["name", "uhid", "mobile", "insuranceLimit", "ipdNo", "diagnosis", "tpa", "insuranceCompany", "doa", "dod", "insuranceId", "claimNo", "policyNo", "empId", "billInvoiceNo", "totalBill", "finalApproved", "discount", "deduction", "patientPay", "settlementAmount", "tdsAmount", "paymentDate", "utr", "contact", "relation", "insuranceAddress", "bankName", "bankAccountNo", "ifscCode", "bankAddress", "courierDetails", "courierDate", "status", "paymentStatus"];
+const fieldIds = ["name", "uhid", "mobile", "insuranceLimit", "ipdNo", "diagnosis", "tpa", "insuranceCompany", "doa", "dod", "insuranceId", "claimNo", "policyNo", "empId", "billInvoiceNo", "totalBill", "finalApproved", "discount", "deduction", "patientPay", "settlementAmount", "tdsAmount", "paymentDate", "utr", "contact", "relation", "insuranceAddress", "bankName", "bankAccountNo", "ifscCode", "bankAddress", "courierDetails", "courierDate", "surgeryName", "remark", "status", "paymentStatus"];
 
 const makeEntries = (keys, details) => keys.reduce((acc, key) => (acc[key] = details, acc), {});
 const tpaBankDetails = {
@@ -517,6 +523,7 @@ function save(){
     localStorage.setItem("nextPatientId", String(nextPatientId));
 }
 
+// FOR AUO COUNT AND TOTALS IN DASHBOARD
 function updateDashboardTotals() {
     let totalBillAll = 0;
     let totalApprovedAll = 0;
@@ -529,6 +536,8 @@ function updateDashboardTotals() {
     let totalInitialApproved = 0;
     let totalAdmitted = 0;
     let totalDischarge = 0;
+    let totalPending = 0;
+    let totalTotalpatienyts = 0;
     let totalPatients = patients.length;
 
     patients.forEach(p => {
@@ -544,6 +553,8 @@ function updateDashboardTotals() {
         if (status === "Initial Approved") totalInitialApproved++;
         if (status === "Admitted") totalAdmitted++;
         if (status === "Discharge") totalDischarge++;
+        if (status === "Pending") totalPending++;
+        if (status) totalTotalpatienyts++;
     });
 
     document.getElementById("totalBillSum").innerText = totalBillAll.toLocaleString('en-IN');
@@ -557,7 +568,9 @@ function updateDashboardTotals() {
     document.getElementById("totalInitialApprovedCount").innerText = totalInitialApproved;
     document.getElementById("totalAdmittedCount").innerText = totalAdmitted;
     document.getElementById("totalDischargeCount").innerText = totalDischarge;
+    document.getElementById("totalPendingCount").innerText = totalPending;
     document.getElementById("totalPatientsCount").innerText = totalPatients;
+    document.getElementById("totalPatientsWithStatusCount").innerText = totalTotalpatienyts;
 }
 
 function buildPatientFromForm() {
@@ -598,7 +611,9 @@ function populateFormForReAdmit(existingPatient) {
         'tdsAmount',       // TDS Amount
         'utr',             // Payment/UTR
         'courierDetails',  // Courier Details
-        'courierDate'      // Courier Date
+        'courierDate',      // Courier Date
+        'surgeryName',      // Surgery Name
+        'remark'            // Remark
     ];
     
     fieldIds.forEach(id => {
@@ -786,7 +801,9 @@ function getFilteredPatients() {
             p.diagnosis,
             p.billInvoiceNo,
             p.relation,
-            p.courierDetails
+            p.courierDetails,
+            p.surgeryName,
+            p.remark,
         ];
 
         const termMatch = searchFields.some(value => String(value || "").toLowerCase().includes(s));
@@ -810,7 +827,7 @@ function render(){
         sumSettled += parseFloat(p.settlementAmount || 0);
         const checked = selectedPatientIds.has(p.id) ? 'checked' : '';
         const whatsappButton = p.status === 'Discharge Approved' && p.mobile ? `<button style="background:#25D366; color:white; margin-left:4px;" onclick="sendWhatsAppByIndex(${patients.indexOf(p)})">WhatsApp</button>` : '';
-        tbody.innerHTML += `<tr><td><input type="checkbox" data-patient-id="${p.id}" ${checked} onchange="toggleSelection(${p.id}, this.checked)"></td><td><button class="btn-edit" onclick="editPatient(${patients.indexOf(p)})">Edit</button><button class="btn-del" onclick="deletePatient(${patients.indexOf(p)})">Del</button>${whatsappButton}</td><td>${serial++}</td><td><b>${p.name}</b><br><small>UHID: ${p.uhid}<br>Mobile: ${p.mobile || '-'}</small></td><td>${p.uhid || '-'}</td><td>${p.mobile || '-'}</td><td>${p.insuranceLimit || '-'}</td><td>${p.ipdNo || '-'}</td><td><small>DOA: ${p.doa||'-'}<br>DOD: ${p.dod||'-'}</small></td><td>${p.tpa || '-'}</td><td>${p.insuranceCompany || '-'}</td><td>${p.insuranceId || '-'}</td><td>${p.claimNo || '-'}</td><td>${p.policyNo || '-'}</td><td>${p.empId || '-'}</td><td>${p.billInvoiceNo || '-'}</td><td>₹${p.totalBill}</td><td style="color:green">₹${p.finalApproved}</td><td>₹${p.discount}</td><td style="color:red">₹${p.deduction}</td><td>₹${p.patientPay || '-'}</td><td>₹${p.settlementAmount || '-'}</td><td>₹${p.tdsAmount || '-'}</td><td><small>${p.paymentDate||'-'}<br>${p.utr||'-'}</small></td><td>${p.contact || '-'}</td><td>${p.relation || '-'}</td><td>${p.insuranceAddress || '-'}</td><td>${p.bankName || '-'}</td><td>${p.bankAccountNo || '-'}</td><td>${p.ifscCode || '-'}</td><td>${p.bankAddress || '-'}</td><td>${p.courierDetails || '-'}</td><td>${p.courierDate || '-'}</td><td>${p.diagnosis || '-'}</td><td onclick="filterByStatus('${String(p.status).replace(/'/g, "\\'").replace(/"/g,'&quot;')}')" style="cursor:pointer; color:#007bff; font-weight:bold;">${p.status || '-'}</td></tr>`;
+        tbody.innerHTML += `<tr><td><input type="checkbox" data-patient-id="${p.id}" ${checked} onchange="toggleSelection(${p.id}, this.checked)"></td><td><button class="btn-edit" onclick="editPatient(${patients.indexOf(p)})">Edit</button><button class="btn-del" onclick="deletePatient(${patients.indexOf(p)})">Del</button>${whatsappButton}</td><td>${serial++}</td><td><b>${p.name}</b><br><small>UHID: ${p.uhid}<br>Mobile: ${p.mobile || '-'}</small></td><td>${p.uhid || '-'}</td><td>${p.mobile || '-'}</td><td>${p.insuranceLimit || '-'}</td><td>${p.ipdNo || '-'}</td><td>${p.doa || '-'}</td><td>${p.dod || '-'}</td><td>${p.tpa || '-'}</td><td>${p.insuranceCompany || '-'}</td><td>${p.insuranceId || '-'}</td><td>${p.claimNo || '-'}</td><td>${p.policyNo || '-'}</td><td>${p.empId || '-'}</td><td>${p.billInvoiceNo || '-'}</td><td>₹${p.totalBill}</td><td style="color:green">₹${p.finalApproved}</td><td>₹${p.discount}</td><td style="color:red">₹${p.deduction}</td><td>₹${p.patientPay || '-'}</td><td>₹${p.settlementAmount || '-'}</td><td>₹${p.tdsAmount || '-'}</td><td><small>${p.paymentDate||'-'}<br>${p.utr||'-'}</small></td><td>${p.contact || '-'}</td><td>${p.relation || '-'}</td><td>${p.insuranceAddress || '-'}</td><td>${p.bankName || '-'}</td><td>${p.bankAccountNo || '-'}</td><td>${p.ifscCode || '-'}</td><td>${p.bankAddress || '-'}</td><td>${p.courierDetails || '-'}</td><td>${p.courierDate || '-'}</td><td>${p.diagnosis || '-'}</td><td>${p.surgeryName || '-'}</td><td>${p.remark || '-'}</td><td onclick="filterByStatus('${String(p.status).replace(/'/g, "\\'").replace(/"/g,'&quot;')}')" style="cursor:pointer; color:#007bff; font-weight:bold;">${p.status || '-'}</td></tr>`;
         visiblePatientIds.push(p.id);
     });
     updateDashboardTotals();
@@ -908,7 +925,7 @@ function generateExportLetter() {
     if (!selectedRows.length) return alert('Please select at least one row to generate the cover letter.');
     const showHeader = document.getElementById('showHospitalHeader').checked;
     const html = buildCoverLetterDocument(selectedRows, showHeader);
-    const blob = new Blob([html], { type: 'text/html' });
+    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     window.open(url, '_blank');
 }
@@ -1131,7 +1148,8 @@ function formatDate(dateStr) {
             "Mobile Number": p.mobile,
             "Insurance Limit": p.insuranceLimit,
             "IPD No": p.ipdNo,
-            "DOA / DOD": `${p.doa} / ${p.dod}`,
+            "DOA": p.doa,
+            "DOD": p.dod,
             "TPA/Ins. Name": p.tpa,
             "Insurance Company": p.insuranceCompany,
             "Insurance ID No": p.insuranceId,
@@ -1157,6 +1175,8 @@ function formatDate(dateStr) {
             "Courier Details": p.courierDetails,
             "Courier Date": p.courierDate,
             "Diagnosis": p.diagnosis,
+            "Surgery Name": p.surgeryName,
+            "Remark": p.remark,
             "Status": p.status
         }));
         const ws = XLSX.utils.json_to_sheet(exportData);
@@ -1306,16 +1326,10 @@ function importData(event) {
                 normalized[String(key).trim().toLowerCase()] = row[key];
             });
             
-            let doa = normalized['doa'] || normalized['doa (admission)'] || '';
-            let dod = normalized['dod'] || normalized['dod (discharge)'] || '';
-            const doaDod = normalized['doa / dod'] || '';
-            if (doaDod && !doa && !dod) {
-                const parts = doaDod.split('/').map(p => p.trim());
-                doa = parts[0] || '';
-                dod = parts[1] || '';
-            }
-            doa = formatDateToIso(doa);
-            dod = formatDateToIso(dod);
+            const doa = normalized['doa'] || normalized['doa (admission)'] || normalized['doa / dod']?.split('/')[0]?.trim() || '';
+            const dod = normalized['dod'] || normalized['dod (discharge)'] || normalized['doa / dod']?.split('/')[1]?.trim() || '';
+            let doaFormatted = formatDateToIso(doa);
+            let dodFormatted = formatDateToIso(dod);
             
             let paymentDate = normalized['pay_date'] || normalized['payment date'] || normalized['payment_date'] || '';
             let utr = normalized['utr'] || '';
@@ -1342,8 +1356,8 @@ function importData(event) {
                 bankAccountNo: normalized['bank account no.'] || normalized['bank account number'] || normalized['bank_account_number'] || normalized['account number'] || normalized['account_no'] || '',
                 ifscCode: normalized['ifsc code'] || normalized['ifsc_code'] || normalized['ifsc'] || '',
                 bankAddress: normalized['bank address'] || normalized['bank_address'] || '',
-                doa: doa,
-                dod: dod,
+                doa: doaFormatted,
+                dod: dodFormatted,
                 totalBill: normalized['total bill'] || normalized['bill'] || normalized['total_bill'] || '',
                 finalApproved: normalized['approved'] || normalized['final approved'] || normalized['final_approved'] || '',
                 discount: normalized['discount'] || normalized['disc'] || '',
@@ -1361,6 +1375,8 @@ function importData(event) {
                 relation: normalized['relation'] || '',
                 courierDetails: normalized['courier details'] || '',
                 courierDate: formatDateToIso(normalized['courier date'] || ''),
+                surgeryName: normalized['surgery name'] || normalized['surgery_Name'] || '',
+                remark: normalized['remark'] || '',
                 status: normalized['status'] || '',
                 paymentStatus: normalized['payment status'] || normalized['pay_status'] || normalized['payment_status'] || ''
             };
@@ -1384,7 +1400,7 @@ function importData(event) {
 
 
   async function syncToGoogleSheet(isManual = true) {
-        const url = "https://script.google.com/macros/s/AKfycbyxxj7yrXmqziziowO3IKzpJ49KNcnhnO_1m30sTrgkR7W4aYvt6IUD3D4__wV6x_kf/exec"; 
+        const url = "https://script.google.com/macros/s/AKfycbwd_F0K4u1e--pFv4jhmF-Qax7GQpZleFZD38FccW2RyLj-cVc3Yfu93TXY4ge192iD/exec"; 
         if(!patients.length) {
             if (isManual) alert("No data to sync.");
             return;
@@ -1400,7 +1416,8 @@ function importData(event) {
                 ipdNo: p.ipdNo || '-',
                 tpaInsName: p.tpa || '-',
                 settlementSummary: p.insuranceCompany || '-',
-                doaDod: `DOA: ${p.doa||'-'} DOD: ${p.dod||'-'}`,
+                doa: p.doa || '-',
+                dod: p.dod || '-',
                 insuranceIdNo: p.insuranceId || '-',
                 claimNo: p.claimNo || '-',
                 policyNo: p.policyNo || '-',
@@ -1425,6 +1442,8 @@ function importData(event) {
                 courierDate: p.courierDate || '-',
                 insuranceCompany: p.insuranceCompany || '-',
                 diagnosis: p.diagnosis || '-',
+                surgeryName: p.surgeryName || '-',
+                remark: p.remark || '-',
                 status: p.status || '-'
             }));
             // Debug: Log the data being sent
